@@ -1,0 +1,40 @@
+def hamilton_graph(n, l):
+    G = nx.Graph()
+
+    for v in range(n):
+        G.add_node(v)
+
+    l_nodes = []
+    r_nodes = []
+
+    for v in G.nodes:
+        if v % 2 == 0:
+            l_nodes.append(v)
+        else:
+            r_nodes.append(v)
+
+    v = random.choice(l_nodes)
+    first = v
+    l_nodes.remove(v)
+    i = 0
+    while r_nodes:
+        if i % 2 == 0:
+            u = random.choice(r_nodes)
+            r_nodes.remove(u)
+        else:
+            u = random.choice(l_nodes)
+            l_nodes.remove(u)
+
+        G.add_edge(v, u)
+        v = u
+        i += 1
+
+        if len(r_nodes) == 1 and len(l_nodes) == 0:
+            G.add_edge(first, r_nodes[0])
+        elif len(l_nodes) == 1 and len(r_nodes) == 0:
+            G.add_edge(first, l_nodes[0])
+
+    while l * (n * (n - 1) / 2) > len(G.edges):
+        G.add_edge(random.choice(list(G.nodes)), random.choice(list(G.nodes)))
+
+    return G
