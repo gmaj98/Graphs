@@ -1,0 +1,36 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
+
+
+def E_graph(n, l):
+    G = nx.Graph()
+
+    for v in range(n):
+        G.add_node(v)
+
+    for u in range(n):
+        for v in range(n):
+            if u < v and random.random() < l:
+                G.add_edge(u, v)
+
+    edges = []
+    for v in G.nodes:
+        if G.degree(v) % 2 != 0:
+            edges.append(v)
+
+    i = 0
+    while edges:
+        u = random.choice(edges)
+        v = random.choice(edges)
+        G.add_edge(u, v)
+        edges.clear()
+
+        for v in G.nodes:
+            if G.degree(v) % 2 != 0:
+                edges.append(v)
+        i += 1
+        if i % 10 == 0:
+            G.add_edge(random.choice(edges), random.choice(list(G.edges)))
+
+    return G
